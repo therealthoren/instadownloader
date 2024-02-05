@@ -103,8 +103,22 @@ export class AppService {
   }
 
   downloadImage(url: string, filename: string) {
-    return new Promise<any>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
 
+      return axios(url, {
+        method: 'GET',
+        responseType: 'stream'
+      }).then((response) => {
+        const writer = fs.createWriteStream(filename);
+        response.data.pipe(writer);
+        writer.on('finish', () => {
+          return resolve();
+        });
+      })
+        .catch((e) => {
+          console.log(e);
+          return resolve();
+        });
 
     });
   }
