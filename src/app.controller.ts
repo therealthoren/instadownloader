@@ -7,7 +7,7 @@ import * as fs from "fs";
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
+  @Get("/posts")
   async getPosts(): Promise<string> {
     return this.appService.getPosts();
   }

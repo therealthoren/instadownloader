@@ -6,6 +6,7 @@ async function bootstrap() {
     snapshot: true
   });
   app.enableCors();
+  app.setGlobalPrefix('api');
   await app.listen(3000);
 }
 bootstrap();
