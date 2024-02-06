@@ -7,12 +7,12 @@ import * as fs from "fs";
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get("/posts")
+  @Get("/api/posts")
   async getPosts(): Promise<string> {
     return this.appService.getPosts();
   }
 
-  @Get('/cached-image')
+  @Get('/api/cached-image')
   // The query parameter "url" is required
   async getCachedImage(@Query("url") url, @Res() response): Promise<any> {
     const fixedUrl = url.replace(/\//g, "_");
