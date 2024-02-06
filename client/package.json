@@ -1,0 +1,60 @@
+{
+  "name": "instaviewer-client",
+  "version": "0.1.0",
+  "private": true,
+  "author": "donnercody",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "type-check": "tsc",
+    "check:turbo": "pnpm dlx turbo@latest lint type-check",
+    "knip": "knip",
+    "format": "prettier --write src",
+    "up-interactive": "pnpm up -i",
+    "up-latest": "pnpm up-interactive -L",
+    "release": "standard-version",
+    "push-release": "git push --follow-tags origin main"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/plus-jakarta-sans": "^5.0.18",
+    "axios": "^1.6.7",
+    "framer-motion": "^10.16.15",
+    "instafeed.js": "^2.0.0",
+    "jwt-decode": "^4.0.0",
+    "million": "2.6.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
+    "react-icons": "^4.12.0",
+    "react-router-dom": "^6.20.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
+    "@types/node": "^20.10.4",
+    "@types/react": "18.2.42",
+    "@types/react-dom": "^18.2.17",
+    "@types/react-helmet": "^6.1.11",
+    "@vitejs/plugin-react": "^4.2.1",
+    "husky": "^8.0.3",
+    "knip": "^3.6.0",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.1.0",
+    "rollup-plugin-visualizer": "^5.10.0",
+    "standard-version": "^9.5.0",
+    "typescript": "5.3.3",
+    "vite": "^5.0.12",
+    "vite-plugin-checker": "^0.6.2",
+    "vite-plugin-pwa": "^0.17.4",
+    "vite-tsconfig-paths": "^4.2.2"
+  },
+  "engines": {
+    "node": ">=16.x.x",
+    "pnpm": ">=8"
+  }
+}
