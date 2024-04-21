@@ -1,29 +1,49 @@
-import {Controller, Get, Query, Res} from '@nestjs/common';
-import { AppService } from './app.service';
+import {ClassSerializerInterceptor, Controller, Get, Inject, Query, Res, UseInterceptors} from '@nestjs/common';
+import {AppService, ViewPost} from './app.service';
 import axios from "axios";
 import * as fs from "fs";
+import {IMediaSystemInterface} from "./media/IMediaSystemInterface";
+import {PostService} from "./database/post/post.service";
+import { serialize } from 'class-transformer';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService,
+              private readonly postService: PostService,
+              @Inject('MEDIA_SERVICE')
+              private readonly mediaService: IMediaSystemInterface) {}
+
+  onModuleInit() {
+    this.checkIfPostsExist();
+  }
+
+  async checkIfPostsExist() {
+    return this.appService.downloadNewestFeeds();
+  }
+
+
 
   @Get("/api/posts")
-  async getPosts(): Promise<string> {
-    return this.appService.getPosts();
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getPosts(): Promise<ViewPost[]> {
+      return this.appService.getPosts();
   }
 
   @Get('/api/cached-image')
   // The query parameter "url" is required
   async getCachedImage(@Query("url") url, @Res() response): Promise<any> {
     const fixedUrl = url.replace(/\//g, "_");
-    const isImage = fs.existsSync(`./images/${fixedUrl}.jpg`);
-    const isVideo = fs.existsSync(`./images/${fixedUrl}.mp4`);
-    if (!isImage && !isVideo) {
-      return response.status(404).send("Not found");
-    }
-    const fullPath = isImage ? `/${fixedUrl}.jpg` : `/${fixedUrl}.mp4`;
-    console.log(fixedUrl);
-    // Return the image from the "image" directory
-    return response.sendFile(fullPath, { root: './images' });
+    return this.postService.findPostByDownloadUrl(fixedUrl)
+      .then((post) => {
+        if (!post) {
+          return response.status(404).send("Not found");
+        }
+        return this.mediaService.download(post.id.toString(), !post.num_of_videos || post.num_of_videos < 0)
+          .then((ret) => {
+            response.contentType(ret.contentType);
+            ret.send(response);
+          });
+
+      });
   }
 }
